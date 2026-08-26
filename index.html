@@ -1,0 +1,149 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#17251c">
+    <title>The Outsider — GM Dashboard</title>
+    <link rel="icon" href="assets/icons/outsider-mark.svg" type="image/svg+xml">
+    <link rel="stylesheet" href="css/style.css?v=1">
+  </head>
+  <body class="gm-page">
+    <div class="site-shell">
+      <header class="topbar">
+        <div class="brand-lockup" aria-label="The Outsider Game Master Dashboard">
+          <span class="brand-mark" aria-hidden="true">✦</span>
+          <div>
+            <p class="eyebrow">THE OUTSIDER</p>
+            <h1>GM Dashboard</h1>
+          </div>
+        </div>
+        <div class="topbar-actions">
+          <a class="public-link" href="player.html" target="_blank" rel="noopener">Open public window <span aria-hidden="true">↗</span></a>
+          <p class="shortcut-hint">Shortcuts: Space · H · 1–3 · Esc</p>
+        </div>
+      </header>
+
+      <main class="dashboard-grid">
+        <aside class="control-column" aria-label="Game master controls">
+          <section class="panel public-panel" aria-labelledby="public-screen-heading">
+            <div class="panel-heading">
+              <div>
+                <p class="section-kicker">Broadcast control</p>
+                <h2 id="public-screen-heading">Public Screen</h2>
+              </div>
+              <span id="public-status" class="status-pill status-showing" role="status">● ON</span>
+            </div>
+            <p class="status-copy" id="screen-status-copy">The opening screen is visible.</p>
+            <div class="public-actions">
+              <button class="button button-primary button-large" id="show-public-button" type="button">Show public screen</button>
+              <button class="button button-danger button-large" id="hide-public-button" type="button">Hide public screen</button>
+              <button class="button button-dark button-wide" id="black-screen-button" type="button">Black screen</button>
+            </div>
+          </section>
+
+          <section class="panel music-panel" aria-labelledby="music-heading">
+            <div class="panel-heading">
+              <div>
+                <p class="section-kicker">Soundscape</p>
+                <h2 id="music-heading">Music</h2>
+              </div>
+              <span class="music-note" aria-hidden="true">♫</span>
+            </div>
+            <div class="now-playing">
+              <span>Now playing</span>
+              <strong id="now-playing">No track selected</strong>
+            </div>
+            <p id="music-message" class="music-message" aria-live="polite">Choose a track, then press Play.</p>
+            <div class="music-transport" aria-label="Music controls">
+              <button class="icon-button" id="previous-track" type="button" aria-label="Previous track">⏮</button>
+              <button class="icon-button" id="play-track" type="button" aria-label="Play music">▶</button>
+              <button class="icon-button" id="pause-track" type="button" aria-label="Pause music">❚❚</button>
+              <button class="icon-button" id="stop-track" type="button" aria-label="Stop music">■</button>
+              <button class="icon-button" id="next-track" type="button" aria-label="Next track">⏭</button>
+            </div>
+            <label class="volume-control" for="volume-slider"><span>Volume</span><input id="volume-slider" type="range" min="0" max="1" value="0.65" step="0.05"></label>
+            <div id="track-list" class="track-list" aria-label="Available music"></div>
+          </section>
+
+          <section class="panel dice-panel" aria-labelledby="dice-heading">
+            <div class="panel-heading">
+              <div>
+                <p class="section-kicker">Fast resolution</p>
+                <h2 id="dice-heading">D6 Dice</h2>
+              </div>
+              <span class="dice-symbol" aria-hidden="true">⚄</span>
+            </div>
+            <div class="dice-count" role="group" aria-label="Number of dice">
+              <button type="button" class="dice-choice is-selected" data-dice-count="1">1d6</button>
+              <button type="button" class="dice-choice" data-dice-count="2">2d6</button>
+              <button type="button" class="dice-choice" data-dice-count="3">3d6</button>
+            </div>
+            <div class="dice-results" id="dice-results" aria-label="Dice results">
+              <span class="die-result">–</span><span class="die-result is-empty">–</span><span class="die-result is-empty">–</span>
+            </div>
+            <p class="dice-total" id="dice-total">Total: —</p>
+            <button class="button button-primary button-wide roll-button" id="roll-button" type="button">Roll 1d6</button>
+            <div class="roll-history-wrap">
+              <p class="minor-label">Recent rolls</p>
+              <ol id="roll-history" class="roll-history" aria-live="polite"><li>No rolls yet.</li></ol>
+            </div>
+          </section>
+        </aside>
+
+        <section class="content-column" aria-label="Handouts and quick actions">
+          <section class="overview-strip" aria-label="At a glance">
+            <div class="overview-item">
+              <span>Current public handout</span>
+              <strong id="current-handout">The Outsider opening screen</strong>
+            </div>
+            <div class="overview-item">
+              <span>Public screen</span>
+              <strong id="overview-screen-status">🟢 Showing</strong>
+            </div>
+            <div class="overview-item">
+              <span>Current music</span>
+              <strong id="overview-music">No track selected</strong>
+            </div>
+            <div class="overview-item">
+              <span>Last roll</span>
+              <strong id="last-roll">No roll yet</strong>
+            </div>
+          </section>
+
+          <section class="panel handouts-panel" aria-labelledby="handouts-heading">
+            <div class="panel-heading handout-heading">
+              <div>
+                <p class="section-kicker">Scene library</p>
+                <h2 id="handouts-heading">Handouts</h2>
+              </div>
+              <p class="handout-note">Select a card to prepare it. <strong>Show</strong> sends it to the public window immediately.</p>
+            </div>
+            <div id="handout-grid" class="handout-grid"></div>
+          </section>
+
+          <section class="panel quick-actions-panel" aria-labelledby="quick-actions-heading">
+            <div class="panel-heading">
+              <div>
+                <p class="section-kicker">At your fingertips</p>
+                <h2 id="quick-actions-heading">Quick Actions</h2>
+              </div>
+            </div>
+            <div class="quick-action-grid">
+              <button class="quick-action primary-action" id="quick-show-handout" type="button"><span>▣</span>Show current handout</button>
+              <button class="quick-action danger-action" id="quick-hide-public" type="button"><span>◼</span>Hide public screen</button>
+              <button class="quick-action" id="quick-play-music" type="button"><span>▶</span>Play music</button>
+              <button class="quick-action" id="quick-pause-music" type="button"><span>❚❚</span>Pause music</button>
+              <button class="quick-action" data-quick-roll="1" type="button"><span>⚀</span>Roll 1d6</button>
+              <button class="quick-action" data-quick-roll="2" type="button"><span>⚁</span>Roll 2d6</button>
+              <button class="quick-action" data-quick-roll="3" type="button"><span>⚂</span>Roll 3d6</button>
+            </div>
+          </section>
+        </section>
+      </main>
+    </div>
+    <script src="js/data.js"></script>
+    <script src="js/communication.js"></script>
+    <script src="js/gm.js"></script>
+  </body>
+</html>
