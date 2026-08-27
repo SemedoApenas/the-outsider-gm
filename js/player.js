@@ -112,8 +112,8 @@
     }
 
     diceOverlayDice.textContent = `${roll.dice}d6`;
-    diceOverlayExpression.textContent = roll.results.join(" + ");
-    diceOverlayTotal.textContent = `TOTAL: ${roll.total}`;
+    diceOverlayExpression.textContent = roll.results.join("   ");
+    diceOverlayTotal.textContent = "";
     diceOverlay.hidden = false;
     // Restart the fade-in animation even if the overlay was already visible.
     diceOverlay.classList.remove("is-visible");

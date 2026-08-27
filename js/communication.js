@@ -44,13 +44,16 @@
   function safeRoll(candidate) {
     if (!candidate) return null;
     const dice = [1, 2, 3].includes(Number(candidate.dice)) ? Number(candidate.dice) : null;
-    const results = Array.isArray(candidate.results) ? candidate.results.map(Number).filter((n) => n >= 1 && n <= 6) : null;
+    const results = Array.isArray(candidate.results)
+        ? candidate.results.map(Number).filter((n) => n >= 1 && n <= 6)
+        : null;
+
     if (!dice || !results || results.length !== dice) return null;
-    const computedTotal = results.reduce((sum, value) => sum + value, 0);
-    const total = Number(candidate.total) === computedTotal ? Number(candidate.total) : computedTotal;
+
     const revealedAt = Number(candidate.revealedAt) || Date.now();
     const visible = Boolean(candidate.visible);
-    return { dice, results, total, revealedAt, visible };
+
+    return { dice, results, revealedAt, visible };
   }
 
   function safeMusic(candidate) {

@@ -53,7 +53,7 @@
   let diceCount = 1;
   let isRolling = false;
   let diceVisibility = "private";
-  let lastRoll = null; // { dice, results, total } — kept privately regardless of visibility
+  let lastRoll = null; // { dice, results } — kept privately regardless of visibility
   const history = [];
   let editingHandoutId = null;
   let editingTrackId = null;
@@ -413,18 +413,18 @@
   }
 
   function appendHistory(values) {
-    const total = values.reduce((sum, value) => sum + value, 0);
-    const label = `${diceCount}d6 → ${values.join(" + ")} = ${total}`;
+    const label = `${diceCount}d6 → ${values.join(" + ")}`;
     history.unshift(label);
     history.splice(6);
     rollHistory.innerHTML = history.map((item) => `<li>${item}</li>`).join("");
-    diceTotal.textContent = `Total: ${total}`;
+    diceTotal.textContent = "";
     lastRollLabel.textContent = label;
-    return total;
-  }
+    return values;
+}
+  
 
   function publishRoll(roll) {
-    publishPublicState({ roll: { dice: roll.dice, results: roll.results, total: roll.total, revealedAt: Date.now(), visible: true } });
+    publishPublicState({ roll: { dice: roll.dice, results: roll.results, revealedAt: Date.now(), visible: true } });
   }
 
   function showLastRoll() {
@@ -449,7 +449,7 @@
       const values = Array.from({ length: diceCount }, () => Math.floor(Math.random() * 6) + 1);
       drawDice(values, false);
       const total = appendHistory(values);
-      lastRoll = { dice: diceCount, results: values, total };
+      lastRoll = { dice: diceCount, results: values };
       if (diceVisibility === "public") publishRoll(lastRoll);
       rollButton.disabled = false;
       isRolling = false;
