@@ -107,10 +107,13 @@ h2 { font-size: 24px; line-height: 1.1; }
 .icon-button { min-height: 37px; color: #fdf4d8; background: #2d4a32; border: 1px solid rgba(19, 39, 25, .8); border-radius: 7px; }
 .volume-control { display: flex; align-items: center; gap: 11px; margin: 15px 0; color: #625239; font-size: 12px; font-weight: 700; }
 .volume-control input { width: 100%; accent-color: #547550; }
-.track-list { max-height: 175px; overflow: auto; display: grid; gap: 4px; padding-right: 2px; }
-.track-row { display: grid; grid-template-columns: 28px 1fr; gap: 7px; width: 100%; padding: 7px; color: #4e432e; text-align: left; background: transparent; border: 1px solid transparent; border-radius: 6px; font-size: 12px; }
+.track-list { max-height: 220px; overflow: auto; display: grid; gap: 4px; padding-right: 2px; }
+.track-row { display: grid; grid-template-columns: 20px 1fr auto; align-items: center; gap: 7px; width: 100%; padding: 7px; color: #4e432e; background: transparent; border: 1px solid transparent; border-radius: 6px; font-size: 12px; }
 .track-row.is-selected { color: #203d26; background: #deead7; border-color: #a2bc98; font-weight: 800; }
 .track-number { color: #98713d; font-size: 10px; font-weight: 800; line-height: 1.7; }
+.track-name-cell { display: flex; align-items: center; gap: 6px; min-width: 0; }
+.track-name-cell span:first-child { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.track-row-actions { display: flex; gap: 4px; }
 .empty-track-list { margin: 0; color: #776647; font-size: 12px; }
 
 .dice-count { display: grid; grid-template-columns: repeat(3, 1fr); gap: 7px; margin-bottom: 13px; }
@@ -148,7 +151,8 @@ h2 { font-size: 24px; line-height: 1.1; }
 .handout-card-body { padding: 10px; }
 .category-tag { display: block; margin-bottom: 4px; color: #857247; font-size: 9px; font-weight: 800; letter-spacing: .1em; text-transform: uppercase; }
 .handout-card h3 { min-height: 36px; color: #313c2b; font-size: 13px; line-height: 1.34; }
-.handout-actions { display: grid; grid-template-columns: 1.1fr .9fr; gap: 7px; margin-top: 10px; }
+.handout-actions { display: flex; flex-wrap: wrap; gap: 7px; margin-top: 10px; }
+.handout-actions .button { flex: 1 1 auto; min-width: 64px; }
 
 .quick-action-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 9px; }
 .quick-action { display: flex; align-items: center; justify-content: flex-start; gap: 9px; min-height: 48px; padding: 9px 11px; color: #354130; text-align: left; background: #f0e6cc; border: 1px solid #cfc09f; border-radius: 8px; font-size: 12px; font-weight: 800; transition: transform .14s ease, filter .14s ease; }
@@ -157,6 +161,39 @@ h2 { font-size: 24px; line-height: 1.1; }
 .quick-action.primary-action span { color: #e4c980; }
 .quick-action.danger-action { color: #fff4e8; background: #913c32; border-color: #702a25; }
 .quick-action.danger-action span { color: #f4c7ab; }
+
+/* ---- Dice visibility + manual reveal (GM side) ---- */
+.dice-visibility { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-bottom: 12px; }
+.visibility-toggle { display: flex; gap: 6px; }
+.visibility-choice { min-height: 30px; padding: 5px 12px; color: #5a482c; background: #f6ebcd; border: 1px solid #cdb988; border-radius: 99px; font-size: 11px; font-weight: 800; letter-spacing: .05em; text-transform: uppercase; }
+.visibility-choice.is-selected { color: #fff8e9; background: #6a8151; border-color: #395334; }
+#dice-visibility-public.is-selected { background: #a1442f; border-color: #6f2c1f; }
+.roll-reveal-actions { display: grid; grid-template-columns: 1fr 1fr; gap: 7px; margin-bottom: 13px; }
+
+/* ---- New-item buttons ---- */
+#new-handout-button { margin-bottom: 13px; }
+#new-track-button { margin-top: 10px; }
+
+/* ---- Built-in / Custom tag ---- */
+.kind-tag { display: inline-block; padding: 2px 6px; color: #6d5c39; background: rgba(180, 150, 90, .22); border-radius: 4px; font-size: 8px; font-weight: 800; letter-spacing: .08em; }
+.kind-tag-custom { color: #2c5334; background: rgba(76, 130, 84, .22); }
+.category-tag { display: flex; align-items: center; justify-content: space-between; gap: 6px; }
+
+/* ---- Music indicator toggle (GM side) ---- */
+.indicator-toggle { display: flex; align-items: center; gap: 9px; margin: 4px 0 15px; color: #625239; font-size: 12px; line-height: 1.35; }
+.indicator-toggle input { width: 16px; height: 16px; accent-color: #547550; flex-shrink: 0; }
+
+/* ---- Dialogs (create/edit handout & track, delete confirmation) ---- */
+.app-dialog { padding: 0; border: 1px solid rgba(76, 54, 32, .25); border-radius: 14px; box-shadow: 0 20px 44px rgba(12, 24, 16, .28); }
+.app-dialog::backdrop { background: rgba(15, 22, 16, .55); backdrop-filter: blur(1px); }
+.dialog-form { display: grid; gap: 13px; width: min(90vw, 380px); padding: 22px; background: #fbf4e4; }
+.dialog-form h3 { font-family: Cinzel, Georgia, serif; font-size: 18px; }
+.dialog-form p { margin: 0; font-size: 14px; color: #3c3320; }
+.field-label { display: grid; gap: 6px; color: #55452c; font-size: 12px; font-weight: 700; }
+.field-label input[type="text"] { padding: 9px 10px; color: #241c10; background: #fffaf0; border: 1px solid #cdb988; border-radius: 8px; font-size: 14px; }
+.field-label input[type="file"] { font-size: 12px; }
+.dialog-hint { margin: -4px 0 0; color: #7a6a48; font-size: 11px; }
+.dialog-actions { display: grid; grid-template-columns: 1fr 1fr; gap: 9px; margin-top: 6px; }
 
 /* Public presentation: no header, controls, labels, or diagnostic messages. */
 .player-page { overflow: hidden; min-width: 0; background: #050706; }
@@ -169,6 +206,38 @@ h2 { font-size: 24px; line-height: 1.1; }
 .player-idle p { margin: 0; font-size: clamp(19px, 2.4vw, 38px); font-weight: 700; letter-spacing: .34em; text-indent: .34em; }
 .public-handout { position: relative; z-index: 1; display: block; width: 100%; height: 100%; object-fit: contain; background: #080b09; }
 .public-fallback { position: absolute; z-index: 1; inset: 0; background: #080b09; }
+
+/* Temporary dice-roll overlay: sits on top of the handout without hiding it. */
+.dice-overlay {
+  position: absolute; z-index: 3; left: 50%; bottom: 7%; transform: translate(-50%, 12px);
+  display: grid; gap: 4px; justify-items: center; min-width: 220px; padding: 18px 30px;
+  color: #f7ecca; text-align: center; background: rgba(10, 16, 11, .82);
+  border: 1px solid rgba(224, 193, 113, .4); border-radius: 16px;
+  box-shadow: 0 14px 30px rgba(0, 0, 0, .4);
+  opacity: 0; pointer-events: none; transition: opacity .35s ease, transform .35s ease;
+}
+.dice-overlay.is-visible { opacity: 1; transform: translate(-50%, 0); }
+.dice-overlay-dice { color: #d8a849; font-family: Cinzel, Georgia, serif; font-size: 15px; font-weight: 700; letter-spacing: .1em; }
+.dice-overlay-expression { font-size: 26px; font-weight: 700; }
+.dice-overlay-total { color: #e5c47c; font-family: Cinzel, Georgia, serif; font-size: 15px; letter-spacing: .06em; }
+
+/* Subtle "now playing" note. Deliberately quiet — no controls, no track list. */
+.music-indicator {
+  position: absolute; z-index: 3; left: 20px; bottom: 18px; margin: 0;
+  padding: 6px 12px; color: rgba(230, 220, 190, .75); background: rgba(8, 12, 9, .5);
+  border-radius: 99px; font-size: 12px; letter-spacing: .03em;
+}
+
+/* First-open audio unlock prompt. Quiet banner, not a full-screen blocker. */
+.audio-enable-prompt {
+  position: absolute; z-index: 4; left: 50%; bottom: 24px; transform: translateX(-50%);
+  display: grid; gap: 4px; justify-items: center; padding: 14px 22px;
+  color: #f7ecca; text-align: center; background: rgba(10, 16, 11, .88);
+  border: 1px solid rgba(224, 193, 113, .4); border-radius: 14px; cursor: pointer;
+  box-shadow: 0 14px 30px rgba(0, 0, 0, .4);
+}
+.audio-enable-title { margin: 0; font-family: Cinzel, Georgia, serif; font-size: 13px; letter-spacing: .12em; color: #d8a849; }
+.audio-enable-copy { margin: 0; font-size: 12px; color: #d9cfae; }
 
 @media (max-width: 1120px) {
   .dashboard-grid { grid-template-columns: 310px minmax(0, 1fr); }

@@ -16,8 +16,23 @@
       </div>
       <img id="public-handout" class="public-handout" alt="" hidden>
       <div id="public-fallback" class="public-fallback" hidden aria-hidden="true"></div>
+
+      <div id="dice-overlay" class="dice-overlay" hidden aria-live="polite">
+        <span class="dice-overlay-dice" id="dice-overlay-dice">3d6</span>
+        <span class="dice-overlay-expression" id="dice-overlay-expression">4 + 2 + 6</span>
+        <span class="dice-overlay-total" id="dice-overlay-total">TOTAL: 12</span>
+      </div>
+
+      <p id="music-indicator" class="music-indicator" hidden aria-hidden="true">♪</p>
+
+      <div id="audio-enable-prompt" class="audio-enable-prompt" hidden role="button" tabindex="0" aria-label="Click to enable game audio">
+        <p class="audio-enable-title">AUDIO READY</p>
+        <p class="audio-enable-copy">Click anywhere to enable game audio.</p>
+        <button type="button" id="enable-audio-button" class="button button-primary button-small">Enable audio</button>
+      </div>
     </main>
     <script src="js/communication.js"></script>
+    <script src="js/storage.js"></script>
     <script src="js/player.js"></script>
   </body>
 </html>

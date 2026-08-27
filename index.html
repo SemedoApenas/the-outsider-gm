@@ -63,7 +63,12 @@
               <button class="icon-button" id="next-track" type="button" aria-label="Next track">⏭</button>
             </div>
             <label class="volume-control" for="volume-slider"><span>Volume</span><input id="volume-slider" type="range" min="0" max="1" value="0.65" step="0.05"></label>
+            <label class="indicator-toggle" for="music-indicator-toggle">
+              <input id="music-indicator-toggle" type="checkbox" checked>
+              <span>Show a subtle "now playing" note on the public screen</span>
+            </label>
             <div id="track-list" class="track-list" aria-label="Available music"></div>
+            <button class="button button-dark button-wide" id="new-track-button" type="button">+ New track</button>
           </section>
 
           <section class="panel dice-panel" aria-labelledby="dice-heading">
@@ -73,6 +78,13 @@
                 <h2 id="dice-heading">D6 Dice</h2>
               </div>
               <span class="dice-symbol" aria-hidden="true">⚄</span>
+            </div>
+            <div class="dice-visibility" role="group" aria-label="Dice visibility">
+              <span class="minor-label">Visibility</span>
+              <div class="visibility-toggle">
+                <button type="button" class="visibility-choice is-selected" id="dice-visibility-private" data-visibility="private">Private</button>
+                <button type="button" class="visibility-choice" id="dice-visibility-public" data-visibility="public">Public</button>
+              </div>
             </div>
             <div class="dice-count" role="group" aria-label="Number of dice">
               <button type="button" class="dice-choice is-selected" data-dice-count="1">1d6</button>
@@ -84,6 +96,10 @@
             </div>
             <p class="dice-total" id="dice-total">Total: —</p>
             <button class="button button-primary button-wide roll-button" id="roll-button" type="button">Roll 1d6</button>
+            <div class="roll-reveal-actions">
+              <button class="button button-dark button-small" id="show-last-roll" type="button">Show last roll</button>
+              <button class="button button-dark button-small" id="hide-roll" type="button">Hide roll</button>
+            </div>
             <div class="roll-history-wrap">
               <p class="minor-label">Recent rolls</p>
               <ol id="roll-history" class="roll-history" aria-live="polite"><li>No rolls yet.</li></ol>
@@ -119,6 +135,7 @@
               </div>
               <p class="handout-note">Select a card to prepare it. <strong>Show</strong> sends it to the public window immediately.</p>
             </div>
+            <button class="button button-primary" id="new-handout-button" type="button">+ New handout</button>
             <div id="handout-grid" class="handout-grid"></div>
           </section>
 
@@ -142,8 +159,57 @@
         </section>
       </main>
     </div>
+
+    <dialog id="handout-dialog" class="app-dialog">
+      <form method="dialog" class="dialog-form" id="handout-form">
+        <h3 id="handout-dialog-title">New handout</h3>
+        <label class="field-label" for="handout-title-input">Title
+          <input id="handout-title-input" type="text" required maxlength="80" placeholder="e.g. The Ancient Bridge">
+        </label>
+        <label class="field-label" for="handout-category-input">Category
+          <input id="handout-category-input" type="text" required maxlength="40" placeholder="e.g. Locations">
+        </label>
+        <label class="field-label" for="handout-image-input">Image
+          <input id="handout-image-input" type="file" accept=".png,.jpg,.jpeg,.webp,.svg,image/png,image/jpeg,image/webp,image/svg+xml">
+        </label>
+        <p class="dialog-hint" id="handout-image-hint">PNG, JPG, WEBP, or SVG.</p>
+        <div class="dialog-actions">
+          <button type="button" class="button button-dark" id="handout-dialog-cancel">Cancel</button>
+          <button type="submit" class="button button-primary" id="handout-dialog-save">Save handout</button>
+        </div>
+      </form>
+    </dialog>
+
+    <dialog id="track-dialog" class="app-dialog">
+      <form method="dialog" class="dialog-form" id="track-form">
+        <h3 id="track-dialog-title">New track</h3>
+        <label class="field-label" for="track-name-input">Track name
+          <input id="track-name-input" type="text" required maxlength="80" placeholder="e.g. Underground Temple">
+        </label>
+        <label class="field-label" for="track-audio-input">Audio file
+          <input id="track-audio-input" type="file" accept=".mp3,.wav,.ogg,.m4a,audio/*">
+        </label>
+        <p class="dialog-hint" id="track-audio-hint">MP3, WAV, OGG, or M4A (if supported by your browser).</p>
+        <div class="dialog-actions">
+          <button type="button" class="button button-dark" id="track-dialog-cancel">Cancel</button>
+          <button type="submit" class="button button-primary" id="track-dialog-save">Save track</button>
+        </div>
+      </form>
+    </dialog>
+
+    <dialog id="confirm-dialog" class="app-dialog confirm-dialog">
+      <form method="dialog" class="dialog-form">
+        <p id="confirm-dialog-message">Delete this item?</p>
+        <div class="dialog-actions">
+          <button type="button" class="button button-dark" id="confirm-dialog-cancel">Cancel</button>
+          <button type="submit" class="button button-danger" id="confirm-dialog-confirm" value="confirm">Delete</button>
+        </div>
+      </form>
+    </dialog>
+
     <script src="js/data.js"></script>
     <script src="js/communication.js"></script>
+    <script src="js/storage.js"></script>
     <script src="js/gm.js"></script>
   </body>
 </html>
