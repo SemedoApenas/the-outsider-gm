@@ -16,6 +16,7 @@
   const DEFAULT_MUSIC = Object.freeze({
     track: null,        // { id, kind: "builtin" | "custom", file?, label } | null
     playing: false,
+    loop: false,
     volume: 0.65,
     indicatorEnabled: true,
     resetToken: 0        // bumped on every explicit "Stop" so player.js can distinguish stop from pause
@@ -71,6 +72,7 @@
     return {
       track,
       playing: Boolean(source.playing) && Boolean(track),
+      loop: Boolean(source.loop),
       volume: Number.isFinite(volume) ? Math.min(1, Math.max(0, volume)) : DEFAULT_MUSIC.volume,
       indicatorEnabled: source.indicatorEnabled === undefined ? DEFAULT_MUSIC.indicatorEnabled : Boolean(source.indicatorEnabled),
       resetToken: Number(source.resetToken) || 0

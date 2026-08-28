@@ -15,6 +15,7 @@
   const newTrackButton = document.getElementById("new-track-button");
   const volumeSlider = document.getElementById("volume-slider");
   const musicIndicatorToggle = document.getElementById("music-indicator-toggle");
+  const musicLoopToggle = document.getElementById("music-loop-toggle");
   const diceResults = Array.from(document.querySelectorAll(".die-result"));
   const diceTotal = document.getElementById("dice-total");
   const rollButton = document.getElementById("roll-button");
@@ -26,6 +27,9 @@
   const diceVisibilityPublic = document.getElementById("dice-visibility-public");
 
   const handoutDialog = document.getElementById("handout-dialog");
+  const handoutPreviewDialog = document.getElementById("handout-preview-dialog");
+  const handoutPreviewImage = document.getElementById("handout-preview-image");
+  const handoutPreviewClose = document.getElementById("handout-preview-close");
   const handoutForm = document.getElementById("handout-form");
   const handoutDialogTitle = document.getElementById("handout-dialog-title");
   const handoutTitleInput = document.getElementById("handout-title-input");
@@ -182,6 +186,7 @@
             <div class="handout-actions">
               <button class="button button-small button-primary" type="button" data-show-handout="${handout.id}">Show</button>
               <button class="button button-small button-dark" type="button" data-hide-handout="${handout.id}">Hide</button>
+              <button class="button button-small button-dark" type="button" data-preview-handout="${handout.id}">Preview</button>
               ${isCustom ? `<button class="button button-small button-dark" type="button" data-edit-handout="${handout.id}">Edit</button>` : ""}
               ${isCustom ? `<button class="button button-small button-danger" type="button" data-delete-handout="${handout.id}">Delete</button>` : ""}
             </div>
@@ -203,6 +208,33 @@
       });
     }
   }
+
+  // ---- Handouts: GM-only preview pop-up ------------------------------------
+  // Purely local to this window: it never touches publicState or sync.publish(),
+  // so it can never affect what the Public Screen is showing.
+
+  function openHandoutPreview(id) {
+    const handout = handoutById(id);
+    if (!handout) return;
+    handoutPreviewImage.removeAttribute("src");
+    handoutPreviewImage.alt = handout.name;
+    if (handout.kind === "custom") {
+      if (!storage) return;
+      storage.getHandoutObjectURL(handout.id).then((url) => {
+        if (url) handoutPreviewImage.src = url;
+      });
+    } else {
+      handoutPreviewImage.src = handout.image;
+    }
+    handoutPreviewDialog.showModal();
+  }
+
+  handoutPreviewClose.addEventListener("click", () => handoutPreviewDialog.close());
+  handoutPreviewDialog.addEventListener("click", (event) => {
+    // A click landing on the <dialog> element itself (not its inner content)
+    // is a click on the native ::backdrop — close on it, same as Cancel.
+    if (event.target === handoutPreviewDialog) handoutPreviewDialog.close();
+  });
 
   // ---- Handouts: create / edit / delete dialog ---------------------------
 
@@ -260,6 +292,7 @@
     musicMessage.textContent = !music.track
       ? "Choose a track, then press Play."
       : music.playing ? `Playing ${label} on the public screen.` : `Ready: ${label}.`;
+    musicLoopToggle.checked = music.loop;
     renderTracks();
   }
 
@@ -476,6 +509,7 @@
     volumeDebounce = setTimeout(() => publishMusic({ volume: value }), 120);
   });
   musicIndicatorToggle.addEventListener("change", () => publishMusic({ indicatorEnabled: musicIndicatorToggle.checked }));
+  musicLoopToggle.addEventListener("change", () => publishMusic({ loop: musicLoopToggle.checked }));
   rollButton.addEventListener("click", () => rollDice());
   showLastRollButton.addEventListener("click", showLastRoll);
   hideRollButton.addEventListener("click", hideRoll);
@@ -485,10 +519,12 @@
   handoutGrid.addEventListener("click", (event) => {
     const show = event.target.closest("[data-show-handout]");
     const hide = event.target.closest("[data-hide-handout]");
+    const preview = event.target.closest("[data-preview-handout]");
     const edit = event.target.closest("[data-edit-handout]");
     const del = event.target.closest("[data-delete-handout]");
     const prepare = event.target.closest("[data-prepare-handout]");
     if (show) showHandout(show.dataset.showHandout);
+    else if (preview) openHandoutPreview(preview.dataset.previewHandout);
     else if (edit) openHandoutDialog(customHandouts.find((item) => item.id === edit.dataset.editHandout));
     else if (del) deleteHandout(del.dataset.deleteHandout);
     else if (hide) {
@@ -515,6 +551,7 @@
 
   document.addEventListener("keydown", (event) => {
     if (event.ctrlKey || event.metaKey || event.altKey || event.target.matches("input, textarea, select")) return;
+    if (document.querySelector("dialog[open]")) return; // let the open dialog handle its own Escape/keys
     if (event.key === "Escape" || event.key.toLowerCase() === "h") {
       event.preventDefault();
       hidePublicScreen();
@@ -535,6 +572,7 @@
   });
 
   musicIndicatorToggle.checked = publicState.music.indicatorEnabled;
+  musicLoopToggle.checked = publicState.music.loop;
   volumeSlider.value = String(publicState.music.volume);
   renderHandouts();
   renderPublicStatus();

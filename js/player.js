@@ -132,8 +132,9 @@
   }
 
   function renderMusic(music) {
-    const state = music || { track: null, playing: false, volume: 0.65, indicatorEnabled: true, resetToken: 0 };
+    const state = music || { track: null, playing: false, loop: false, volume: 0.65, indicatorEnabled: true, resetToken: 0 };
     audio.volume = state.volume;
+    audio.loop = Boolean(state.loop);
 
     if (state.resetToken !== lastResetToken) {
       lastResetToken = state.resetToken;

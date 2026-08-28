@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="theme-color" content="#17251c">
     <title>The Outsider — GM Dashboard</title>
-    <link rel="icon" href="assets/icons/outsider-mark.svg" type="image/svg+xml">
+    <link rel="icon" href="assets/icons/outsider-mark.png" type="image/png">
     <link rel="stylesheet" href="css/style.css?v=1">
   </head>
   <body class="gm-page">
@@ -63,6 +63,10 @@
               <button class="icon-button" id="next-track" type="button" aria-label="Next track">⏭</button>
             </div>
             <label class="volume-control" for="volume-slider"><span>Volume</span><input id="volume-slider" type="range" min="0" max="1" value="0.65" step="0.05"></label>
+            <label class="indicator-toggle" for="music-loop-toggle">
+              <input id="music-loop-toggle" type="checkbox">
+              <span>Loop the current track</span>
+            </label>
             <label class="indicator-toggle" for="music-indicator-toggle">
               <input id="music-indicator-toggle" type="checkbox" checked>
               <span>Show a subtle "now playing" note on the public screen</span>
@@ -205,6 +209,13 @@
           <button type="submit" class="button button-danger" id="confirm-dialog-confirm" value="confirm">Delete</button>
         </div>
       </form>
+    </dialog>
+
+    <dialog id="handout-preview-dialog" class="app-dialog handout-preview-dialog">
+      <div class="preview-dialog-inner">
+        <button type="button" class="button button-dark button-small preview-close-button" id="handout-preview-close" aria-label="Close preview">Close ✕</button>
+        <img id="handout-preview-image" class="preview-image" alt="">
+      </div>
     </dialog>
 
     <script src="js/data.js"></script>
